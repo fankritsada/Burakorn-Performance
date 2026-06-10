@@ -1876,7 +1876,7 @@ img {
 
 .dossier-row {
   display: grid;
-  grid-template-columns: 140px 1fr 1fr 150px 1.2fr;
+  grid-template-columns: 124px 120px 1fr 1fr 150px 1.2fr;
   gap: 24px;
   align-items: center;
   border-bottom: 1px solid var(--border);
@@ -1885,6 +1885,33 @@ img {
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.dossier-thumb {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.dossier-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 320ms ease;
+}
+
+.dossier-row:hover .dossier-thumb img {
+  transform: scale(1.06);
+}
+
+.dossier-head .dossier-thumb {
+  border: none;
+  background: none;
+  aspect-ratio: auto;
 }
 
 .dossier-row:hover {
@@ -2450,6 +2477,15 @@ img {
   .status-card div {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+
+  .dossier-thumb {
+    max-width: 200px;
+    margin-bottom: 6px;
+  }
+
+  .dossier-head .dossier-thumb {
+    display: none;
   }
 }
 

@@ -1203,12 +1203,45 @@ img {
 
 .platform-cell {
   position: relative;
-  min-height: 178px;
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
   border-top: 0;
   border-left: 0;
-  padding: 26px;
   overflow: hidden;
   transition: background 240ms ease;
+}
+
+.platform-cell-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: rgba(8, 9, 8, 0.9);
+}
+
+.platform-cell-image {
+  object-fit: cover;
+  filter: grayscale(0.12) brightness(0.92);
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1), filter 320ms ease;
+}
+
+.platform-cell:hover .platform-cell-image {
+  transform: scale(1.04);
+  filter: grayscale(0) brightness(1);
+}
+
+.platform-cell-media::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(15, 16, 15, 0.78));
+  content: "";
+  pointer-events: none;
+}
+
+.platform-cell-body {
+  flex: 1;
+  padding: 22px 26px 26px;
 }
 
 .platform-cell::after {

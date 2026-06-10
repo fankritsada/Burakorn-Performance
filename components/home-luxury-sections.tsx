@@ -359,11 +359,22 @@ export function HomeLuxurySections() {
           <span className="gsap-rule wide" aria-hidden="true" />
           <div className="platform-matrix">
             {platformPoints.map((point, index) => (
-              <motion.div className="platform-cell gsap-item" key={point} {...cardMotion}>
-                <span data-count-to={String(index + 1)}>
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <p>{point}</p>
+              <motion.div className="platform-cell gsap-item" key={point.label} {...cardMotion}>
+                <div className="platform-cell-media">
+                  <Image
+                    src={point.image}
+                    alt={point.alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1100px) 50vw, 33vw"
+                    className="platform-cell-image"
+                  />
+                </div>
+                <div className="platform-cell-body">
+                  <span data-count-to={String(index + 1)}>
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <p>{point.label}</p>
+                </div>
               </motion.div>
             ))}
           </div>

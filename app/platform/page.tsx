@@ -35,7 +35,7 @@ export default function PlatformPage() {
         <div className="container">
           <ul className="point-grid">
             {platformPoints.map((point) => (
-              <li key={point}>{point}</li>
+              <li key={point.label}>{point.label}</li>
             ))}
           </ul>
           <p className="fine-print">

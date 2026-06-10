@@ -382,12 +382,14 @@ export function HomeLuxurySections() {
       </LuxurySection>
 
       <LuxurySection className="private-invitation-section" tone="warm">
-        <div className="container private-invitation-grid">
-          <div>
+        <div className="container private-invitation-layout">
+          <header className="invitation-header">
             <p className="mono-label accent">Private interest</p>
             <h2 data-gsap-heading>Interested in future numbered builds?</h2>
             <span className="gsap-rule" aria-hidden="true" />
+          </header>
 
+          <div className="private-invitation-grid">
             <motion.figure className="invitation-media gsap-item" {...cardMotion}>
               <span
                 className="invitation-corner invitation-corner--tl"
@@ -413,29 +415,8 @@ export function HomeLuxurySections() {
                 <span>BP-002 / Moray</span>
               </figcaption>
             </motion.figure>
-          </div>
-          <div className="private-invitation-copy">
+
             <motion.aside className="invitation-panel gsap-item" {...cardMotion}>
-              <span
-                className="invitation-corner invitation-corner--tl"
-                aria-hidden="true"
-              />
-              <span
-                className="invitation-corner invitation-corner--br"
-                aria-hidden="true"
-              />
-
-              <dl className="invitation-meta">
-                <div className="invitation-meta-row">
-                  <dt>Status</dt>
-                  <dd>Preview — registry concept</dd>
-                </div>
-                <div className="invitation-meta-row">
-                  <dt>Access</dt>
-                  <dd>By private discussion</dd>
-                </div>
-              </dl>
-
               <p className="invitation-copy-text">
                 Request a private registry discussion. No automated outreach,
                 payment, or public offer is connected in this preview.

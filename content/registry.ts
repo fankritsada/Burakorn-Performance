@@ -113,11 +113,41 @@ export const bp002Timeline = [
   },
 ] as const;
 
-export const platformPoints = [
-  "Proven Honda platform.",
-  "K24 engine.",
-  "Strong parts availability in Thailand.",
-  "Low ownership pain.",
-  "Executive body shape.",
-  "High visual transformation potential.",
-] as const;
+export type PlatformPoint = {
+  label: string;
+  image: string;
+  alt: string;
+};
+
+export const platformPoints: PlatformPoint[] = [
+  {
+    label: "Proven Honda platform.",
+    image: "/platform/01-platform.png",
+    alt: "Honda Accord G8 chassis blueprint with dimensions and platform specs.",
+  },
+  {
+    label: "K24 engine.",
+    image: "/platform/02-engine.png",
+    alt: "Honda K24 i-VTEC DOHC engine on a dark studio background.",
+  },
+  {
+    label: "Strong parts availability in Thailand.",
+    image: "/platform/03-parts.png",
+    alt: "Knolling layout of Honda performance and suspension parts.",
+  },
+  {
+    label: "Low ownership pain.",
+    image: "/platform/04-ownership.png",
+    alt: "Honda gauge cluster reading 385,000 km of reliable service.",
+  },
+  {
+    label: "Executive body shape.",
+    image: "/platform/05-body.png",
+    alt: "Side profile of a blacked-out Honda Accord G8 executive sedan.",
+  },
+  {
+    label: "High visual transformation potential.",
+    image: "/platform/06-transformation.png",
+    alt: "Stock versus custom transformed Honda Accord comparison.",
+  },
+];

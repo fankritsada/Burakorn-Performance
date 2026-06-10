@@ -1,6 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { BuildStatusCard } from "@/components/build-status-card";
 import { BuildTimeline } from "@/components/build-timeline";
+import { PageHero } from "@/components/page-hero";
 import { SectionHeading } from "@/components/section-heading";
 import { bp002, bp002Facts, bp002Timeline } from "@/content/registry";
 import { createMetadata } from "@/lib/seo";
@@ -24,21 +26,29 @@ export default function Bp002Page() {
           description: `${siteConfig.definition} ${bp002.summary}`,
         })}
       />
-      <section className="page-hero">
-        <div className="container">
-          <p className="mono-label accent">{bp002.registryNumber}</p>
-          <h1>BP-002 / Moray</h1>
-          <p>
-            BP-002 / Moray is the first commercial validation build in the
-            Burakorn Performance Registry, based on the Honda Accord G8 K24
-            platform in Thailand.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow={bp002.registryNumber}
+        title="BP-002 / Moray"
+        lede="BP-002 / Moray is the first commercial validation build in the Burakorn Performance Registry, based on the Honda Accord G8 K24 platform in Thailand."
+        meta={[
+          { label: "Codename", value: "Moray" },
+          { label: "Status", value: "Active Build" },
+          { label: "Body", value: "Inspection passed" },
+        ]}
+      />
 
       <section className="section">
         <div className="container build-grid">
-          <div className="visual-panel" aria-label="BP-002 exterior placeholder" />
+          <div className="visual-panel">
+            <Image
+              src="/visuals/burakorn-moray-card.png"
+              alt="BP-002 / Moray exterior study on the Honda Accord G8 platform."
+              fill
+              sizes="(max-width: 900px) 100vw, 55vw"
+              className="visual-panel-image"
+              priority
+            />
+          </div>
           <BuildStatusCard facts={bp002Facts} />
         </div>
       </section>

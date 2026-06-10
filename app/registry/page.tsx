@@ -1,4 +1,5 @@
 import { RegistryTable } from "@/components/registry-table";
+import { PageHero } from "@/components/page-hero";
 import { createMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import {
@@ -25,17 +26,22 @@ export default function RegistryPage() {
           description: siteConfig.definition,
         })}
       />
-      <section className="page-hero">
-        <div className="container">
-          <p className="mono-label accent">Registry</p>
-          <h1>Numbered build record.</h1>
-          <p>
+      <PageHero
+        eyebrow="Registry"
+        title="Numbered build record."
+        lede={
+          <>
             {siteConfig.definition} The registry records numbered builds, base
             platform, build status, codename, inspection history, and
             documentation posture.
-          </p>
-        </div>
-      </section>
+          </>
+        }
+        meta={[
+          { label: "Builds", value: "BP-001 — BP-005" },
+          { label: "Platform", value: "Honda Accord G8 K24" },
+          { label: "Base", value: "Bangkok, Thailand" },
+        ]}
+      />
       <section className="section">
         <div className="container">
           <RegistryTable />

@@ -1,3 +1,4 @@
+import { PageHero } from "@/components/page-hero";
 import { createMetadata } from "@/lib/seo";
 import { informationalPageJsonLd, JsonLd } from "@/lib/structured-data";
 
@@ -19,17 +20,11 @@ export default function ContactPage() {
             "Request a private Burakorn Performance Registry discussion.",
         })}
       />
-      <section className="page-hero">
-        <div className="container">
-          <p className="mono-label accent">Contact</p>
-          <h1>Request a private registry discussion.</h1>
-          <p>
-            Private interest is handled manually. No automated submission,
-            payment, CRM update, public posting, or outreach action is connected
-            in this preview.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Contact"
+        title="Request a private registry discussion."
+        lede="Private interest is handled manually. No automated submission, payment, CRM update, public posting, or outreach action is connected in this preview."
+      />
       <section className="section">
         <div className="container contact-grid">
           <div className="contact-panel">

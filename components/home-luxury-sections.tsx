@@ -96,6 +96,42 @@ export function HomeLuxurySections() {
         const rule = section.querySelector(".gsap-rule");
         const sweep = section.querySelector(".gsap-sweep");
         const items = section.querySelectorAll(".gsap-item");
+        const heading = section.querySelector<HTMLElement>("[data-gsap-heading]");
+
+        if (heading && !heading.dataset.split) {
+          heading.dataset.split = "true";
+          const words = (heading.textContent ?? "").split(/(\s+)/);
+          heading.textContent = "";
+          words.forEach((word) => {
+            if (/^\s+$/.test(word)) {
+              heading.appendChild(document.createTextNode(word));
+              return;
+            }
+            const outer = document.createElement("span");
+            outer.className = "gsap-word";
+            const inner = document.createElement("span");
+            inner.className = "gsap-word-inner";
+            inner.textContent = word;
+            outer.appendChild(inner);
+            heading.appendChild(outer);
+          });
+
+          gsap.fromTo(
+            heading.querySelectorAll(".gsap-word-inner"),
+            { yPercent: 116 },
+            {
+              yPercent: 0,
+              duration: 0.9,
+              stagger: 0.06,
+              ease: "power4.out",
+              scrollTrigger: {
+                trigger: section,
+                start: "top 78%",
+                once: true,
+              },
+            },
+          );
+        }
 
         if (rule) {
           gsap.fromTo(
@@ -135,21 +171,40 @@ export function HomeLuxurySections() {
         if (items.length > 0) {
           gsap.fromTo(
             items,
-            { y: 18, autoAlpha: 0.72 },
+            { y: 30, autoAlpha: 0 },
             {
               y: 0,
               autoAlpha: 1,
-              duration: 0.72,
-              stagger: 0.08,
-              ease: "power2.out",
+              duration: 0.78,
+              stagger: 0.09,
+              ease: "power3.out",
               scrollTrigger: {
                 trigger: section,
-                start: "top 70%",
+                start: "top 72%",
                 once: true,
               },
             },
           );
         }
+      });
+
+      // Count-up animation for the platform matrix index numbers.
+      gsap.utils.toArray<HTMLElement>("[data-count-to]").forEach((el) => {
+        const target = Number(el.dataset.countTo ?? "0");
+        const counter = { value: 0 };
+        gsap.to(counter, {
+          value: target,
+          duration: 1.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 86%",
+            once: true,
+          },
+          onUpdate: () => {
+            el.textContent = String(Math.round(counter.value)).padStart(2, "0");
+          },
+        });
       });
     }, rootRef);
 
@@ -189,7 +244,7 @@ export function HomeLuxurySections() {
         <div className="container registry-proof-grid">
           <div className="registry-proof-copy">
             <p className="mono-label accent">Private registry preview</p>
-            <h2>Documented identity before public attention.</h2>
+            <h2 data-gsap-heading>Documented identity before public attention.</h2>
             <span className="gsap-rule" aria-hidden="true" />
           </div>
           <div className="registry-proof-body">
@@ -203,9 +258,15 @@ export function HomeLuxurySections() {
               numbered executive builds from selected platforms in Thailand.
             </p>
             <div className="registry-proof-principles">
-              {registryPrinciples.map(([label, text]) => (
+              {registryPrinciples.map(([label, text], index) => (
                 <motion.div className="principle-tile gsap-item" key={label} {...cardMotion}>
-                  <span>{label}</span>
+                  <div className="principle-tile-head">
+                    <span className="principle-index" aria-hidden="true">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="principle-label">{label}</span>
+                  </div>
+                  <span className="principle-divider" aria-hidden="true" />
                   <p>{text}</p>
                 </motion.div>
               ))}
@@ -219,7 +280,7 @@ export function HomeLuxurySections() {
           <div className="luxury-heading-row">
             <div>
               <p className="mono-label accent">Registry preview</p>
-              <h2>Five controlled build numbers.</h2>
+              <h2 data-gsap-heading>Five controlled build numbers.</h2>
             </div>
             <p>
               A compact sequence, designed to keep the registry legible rather
@@ -233,8 +294,9 @@ export function HomeLuxurySections() {
                 <ElectricBorder
                   className="registry-electric-border"
                   color={cardBorderColors[build.registryNumber]}
-                  speed={0.32}
-                  chaos={0.016}
+                  speed={0.7}
+                  chaos={0.9}
+                  thickness={2}
                   borderRadius={0}
                 >
                   <Link href={build.href} className="luxury-registry-card">
@@ -257,16 +319,25 @@ export function HomeLuxurySections() {
 
       <LuxurySection className="philosophy-statement-section">
         <div className="container philosophy-statement-grid">
-          <div>
+          <div className="philosophy-statement-copy">
             <p className="mono-label accent">Core philosophy</p>
-            <h2>The chassis has its original age. The build is new.</h2>
+            <h2 data-gsap-heading>The chassis has its original age. The build is new.</h2>
+            <p className="philosophy-statement-lead">
+              Every Burakorn build is honest about where it begins and deliberate
+              about what it becomes. These three principles govern the registry.
+            </p>
             <span className="gsap-rule" aria-hidden="true" />
           </div>
           <div className="philosophy-ledger">
-            {philosophyPairs.map(([title, text]) => (
+            {philosophyPairs.map(([title, text], index) => (
               <motion.div className="ledger-row gsap-item" key={title} {...cardMotion}>
-                <span>{title}</span>
-                <p>{text}</p>
+                <span className="ledger-index" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div className="ledger-body">
+                  <span className="ledger-title">{title}</span>
+                  <p>{text}</p>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -278,7 +349,7 @@ export function HomeLuxurySections() {
           <div className="luxury-heading-row">
             <div>
               <p className="mono-label accent">Why this platform</p>
-              <h2>Honda Accord G8 K24.</h2>
+              <h2 data-gsap-heading>Honda Accord G8 K24.</h2>
             </div>
             <p>
               A proven executive base selected for practical ownership, parts
@@ -288,9 +359,22 @@ export function HomeLuxurySections() {
           <span className="gsap-rule wide" aria-hidden="true" />
           <div className="platform-matrix">
             {platformPoints.map((point, index) => (
-              <motion.div className="platform-cell gsap-item" key={point} {...cardMotion}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <p>{point}</p>
+              <motion.div className="platform-cell gsap-item" key={point.label} {...cardMotion}>
+                <div className="platform-cell-media">
+                  <Image
+                    src={point.image}
+                    alt={point.alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1100px) 50vw, 33vw"
+                    className="platform-cell-image"
+                  />
+                </div>
+                <div className="platform-cell-body">
+                  <span data-count-to={String(index + 1)}>
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <p>{point.label}</p>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -298,22 +382,55 @@ export function HomeLuxurySections() {
       </LuxurySection>
 
       <LuxurySection className="private-invitation-section" tone="warm">
-        <div className="container private-invitation-grid">
-          <div>
+        <div className="container private-invitation-layout">
+          <header className="invitation-header">
             <p className="mono-label accent">Private interest</p>
-            <h2>Interested in future numbered builds?</h2>
+            <h2 data-gsap-heading>Interested in future numbered builds?</h2>
             <span className="gsap-rule" aria-hidden="true" />
-          </div>
-          <div className="private-invitation-copy">
-            <p>
-              Request a private registry discussion. No automated outreach,
-              payment, or public offer is connected in this preview.
-            </p>
-            <motion.div className="gsap-item" {...cardMotion}>
-              <Link href="/contact" className="luxury-cta">
+          </header>
+
+          <div className="private-invitation-grid">
+            <motion.figure className="invitation-media gsap-item" {...cardMotion}>
+              <span
+                className="invitation-corner invitation-corner--tl"
+                aria-hidden="true"
+              />
+              <span
+                className="invitation-corner invitation-corner--br"
+                aria-hidden="true"
+              />
+              <video
+                className="invitation-video"
+                src="/media/drone.mp4"
+                poster="/media/drone-poster.png"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-label="Aerial drone footage of a numbered Burakorn Performance build"
+              />
+              <figcaption className="invitation-media-caption">
+                <span className="mono-label">Aerial study</span>
+                <span>BP-002 / Moray</span>
+              </figcaption>
+            </motion.figure>
+
+            <motion.aside className="invitation-panel gsap-item" {...cardMotion}>
+              <p className="invitation-copy-text">
+                Request a private registry discussion. No automated outreach,
+                payment, or public offer is connected in this preview.
+              </p>
+
+              <Link href="/contact" className="luxury-cta invitation-cta">
                 Request Registry Discussion
               </Link>
-            </motion.div>
+
+              <p className="invitation-note">
+                Responses are handled personally. Expect a considered reply, not
+                an instant one.
+              </p>
+            </motion.aside>
           </div>
         </div>
       </LuxurySection>

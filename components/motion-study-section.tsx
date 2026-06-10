@@ -3,6 +3,14 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { MotionVideo } from "@/components/motion-video";
 
+const motionCriteria = [
+  "Stance",
+  "Proportion",
+  "Sound",
+  "Surface reflection",
+  "Control",
+];
+
 export function MotionStudySection() {
   const shouldReduceMotion = useReducedMotion();
 
@@ -39,12 +47,25 @@ export function MotionStudySection() {
             viewport={{ once: true, amount: 0.5 }}
             transition={{ ...transition, delay: 0.2 }}
           />
-          <p>
+          <p className="motion-lead">
             Static condition matters, but the registry is built around the way a
-            numbered car carries itself in motion: stance, proportion, sound,
-            surface reflection, and control.
+            numbered car carries itself in motion.
           </p>
-          <p>
+          <ul className="motion-criteria" aria-label="Motion evaluation criteria">
+            {motionCriteria.map((criterion, index) => (
+              <motion.li
+                key={criterion}
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.6 }}
+                transition={{ ...transition, delay: 0.28 + index * 0.06 }}
+              >
+                <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+                {criterion}
+              </motion.li>
+            ))}
+          </ul>
+          <p className="motion-note">
             This preview section is a visual study only. It supports the build
             language without making performance claims, availability claims, or
             public purchase offers.
@@ -59,7 +80,13 @@ export function MotionStudySection() {
           transition={{ ...transition, delay: 0.14 }}
           whileHover={shouldReduceMotion ? undefined : { y: -6 }}
         >
+          <span className="motion-corner motion-corner--tl" aria-hidden="true" />
+          <span className="motion-corner motion-corner--br" aria-hidden="true" />
           <MotionVideo />
+          <div className="motion-caption">
+            <span className="mono-label">BP / Motion reference</span>
+            <span className="mono-label motion-caption-tag">Visual study</span>
+          </div>
         </motion.div>
       </div>
     </section>

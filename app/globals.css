@@ -1323,6 +1323,92 @@ img {
   transform: translateY(-2px);
 }
 
+.private-invitation-copy {
+  width: 100%;
+}
+
+.invitation-panel {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(circle at 85% 0%, rgba(169, 54, 43, 0.12), transparent 24rem),
+    linear-gradient(180deg, rgba(243, 238, 227, 0.045), rgba(13, 15, 15, 0.42));
+  padding: 40px 38px 36px;
+}
+
+.invitation-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.invitation-corner--tl {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid rgba(214, 93, 78, 0.78);
+  border-left: 1px solid rgba(214, 93, 78, 0.78);
+}
+
+.invitation-corner--br {
+  right: -1px;
+  bottom: -1px;
+  border-right: 1px solid rgba(214, 93, 78, 0.78);
+  border-bottom: 1px solid rgba(214, 93, 78, 0.78);
+}
+
+.invitation-meta {
+  display: grid;
+  gap: 0;
+  margin: 0 0 24px;
+  border-top: 1px solid var(--border);
+}
+
+.invitation-meta-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0;
+}
+
+.invitation-meta-row dt {
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.invitation-meta-row dd {
+  margin: 0;
+  color: var(--muted-strong);
+  font-size: 0.88rem;
+  text-align: right;
+}
+
+.private-invitation-copy .invitation-copy-text {
+  margin: 0 0 28px;
+  color: var(--muted-strong);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.invitation-cta {
+  width: 100%;
+}
+
+.private-invitation-copy .invitation-note {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
 .section {
   border-bottom: 1px solid var(--border);
   padding: 86px 0;
@@ -1530,13 +1616,103 @@ img {
 
 .private-interest-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 42px;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 56px;
   align-items: center;
 }
 
-.private-interest p {
-  max-width: 620px;
+.private-interest-lede h2 {
+  margin: 18px 0 0;
+}
+
+.private-interest-rule {
+  display: block;
+  width: 92px;
+  height: 2px;
+  margin-top: 28px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft) 70%, transparent);
+}
+
+.request-panel {
+  position: relative;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(circle at 85% 0%, rgba(169, 54, 43, 0.12), transparent 22rem),
+    linear-gradient(180deg, rgba(243, 238, 227, 0.04), rgba(13, 15, 15, 0.4));
+  padding: 38px 36px 34px;
+}
+
+.request-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+
+.request-corner--tl {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid rgba(214, 93, 78, 0.75);
+  border-left: 1px solid rgba(214, 93, 78, 0.75);
+}
+
+.request-corner--br {
+  right: -1px;
+  bottom: -1px;
+  border-right: 1px solid rgba(214, 93, 78, 0.75);
+  border-bottom: 1px solid rgba(214, 93, 78, 0.75);
+}
+
+.request-meta {
+  display: grid;
+  gap: 0;
+  margin: 0 0 22px;
+  border-top: 1px solid var(--border);
+}
+
+.request-meta-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid var(--border);
+  padding: 11px 0;
+}
+
+.request-meta-row dt {
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.request-meta-row dd {
+  margin: 0;
+  color: var(--muted-strong);
+  font-size: 0.86rem;
+  text-align: right;
+}
+
+.private-interest .request-copy {
+  max-width: none;
+  margin: 0 0 26px;
+  color: var(--muted-strong);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.request-cta {
+  width: 100%;
+}
+
+.private-interest .request-note {
+  max-width: none;
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.55;
 }
 
 .page-hero {

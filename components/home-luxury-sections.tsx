@@ -389,15 +389,41 @@ export function HomeLuxurySections() {
             <span className="gsap-rule" aria-hidden="true" />
           </div>
           <div className="private-invitation-copy">
-            <p>
-              Request a private registry discussion. No automated outreach,
-              payment, or public offer is connected in this preview.
-            </p>
-            <motion.div className="gsap-item" {...cardMotion}>
-              <Link href="/contact" className="luxury-cta">
+            <motion.aside className="invitation-panel gsap-item" {...cardMotion}>
+              <span
+                className="invitation-corner invitation-corner--tl"
+                aria-hidden="true"
+              />
+              <span
+                className="invitation-corner invitation-corner--br"
+                aria-hidden="true"
+              />
+
+              <dl className="invitation-meta">
+                <div className="invitation-meta-row">
+                  <dt>Status</dt>
+                  <dd>Preview — registry concept</dd>
+                </div>
+                <div className="invitation-meta-row">
+                  <dt>Access</dt>
+                  <dd>By private discussion</dd>
+                </div>
+              </dl>
+
+              <p className="invitation-copy-text">
+                Request a private registry discussion. No automated outreach,
+                payment, or public offer is connected in this preview.
+              </p>
+
+              <Link href="/contact" className="luxury-cta invitation-cta">
                 Request Registry Discussion
               </Link>
-            </motion.div>
+
+              <p className="invitation-note">
+                Responses are handled personally. Expect a considered reply, not
+                an instant one.
+              </p>
+            </motion.aside>
           </div>
         </div>
       </LuxurySection>

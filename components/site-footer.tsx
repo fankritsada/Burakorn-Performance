@@ -1,9 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
 
-const registryLinks = siteConfig.nav.slice(0, 3);
-const programLinks = siteConfig.nav.slice(3);
-
 const registryMeta = [
   { label: "Category", value: siteConfig.category },
   { label: "Origin", value: siteConfig.location },
@@ -16,15 +13,56 @@ export function SiteFooter() {
   return (
     <footer className="site-footer">
       <span className="footer-accent-line" aria-hidden="true" />
+
       <div className="container footer-top">
-        <div className="footer-brand">
-          <span className="footer-corner footer-corner--tl" aria-hidden="true" />
-          <Link href="/" className="footer-lockup" aria-label="Burakorn Performance home">
+        <div className="footer-col footer-col--brand">
+          <Link
+            href="/"
+            className="footer-lockup"
+            aria-label="Burakorn Performance home"
+          >
             <span className="footer-wordmark">Burakorn</span>
             <span className="footer-wordmark-sub">Performance Registry</span>
           </Link>
           <p className="footer-thesis">{siteConfig.thesis}</p>
+
+          <nav className="footer-nav" aria-label="Footer navigation">
+            <ul>
+              {siteConfig.nav.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href}>{item.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+
+        <div className="footer-col">
+          <p className="footer-col-heading">Registry</p>
           <p className="footer-definition">{siteConfig.definition}</p>
+
+          <p className="footer-col-heading footer-col-heading--spaced">
+            Documentation
+          </p>
+          <ul className="footer-doc-list">
+            <li>
+              <Link href="/registry">Registry index</Link>
+            </li>
+            <li>
+              <Link href="/bp-002-moray">BP-002 / Moray build sheet</Link>
+            </li>
+          </ul>
+        </div>
+
+        <div className="footer-col">
+          <p className="footer-col-heading">Private interest</p>
+          <Link href="/contact" className="footer-contact-link">
+            Request registry discussion
+          </Link>
+
+          <p className="footer-col-heading footer-col-heading--spaced">
+            Detail
+          </p>
           <dl className="footer-meta">
             {registryMeta.map((item) => (
               <div key={item.label} className="footer-meta-row">
@@ -34,29 +72,6 @@ export function SiteFooter() {
             ))}
           </dl>
         </div>
-
-        <nav className="footer-nav" aria-label="Footer navigation">
-          <div className="footer-nav-group">
-            <p className="footer-nav-heading">Registry</p>
-            <ul>
-              {registryLinks.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href}>{item.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="footer-nav-group">
-            <p className="footer-nav-heading">Program</p>
-            <ul>
-              {programLinks.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href}>{item.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </nav>
       </div>
 
       <div className="container footer-bottom">
@@ -67,6 +82,10 @@ export function SiteFooter() {
             {`© ${year} Burakorn Performance. Independent concept.`}
           </span>
         </div>
+      </div>
+
+      <div className="footer-giant" aria-hidden="true">
+        <span>Burakorn</span>
       </div>
     </footer>
   );

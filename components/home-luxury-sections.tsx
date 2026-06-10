@@ -387,6 +387,32 @@ export function HomeLuxurySections() {
             <p className="mono-label accent">Private interest</p>
             <h2 data-gsap-heading>Interested in future numbered builds?</h2>
             <span className="gsap-rule" aria-hidden="true" />
+
+            <motion.figure className="invitation-media gsap-item" {...cardMotion}>
+              <span
+                className="invitation-corner invitation-corner--tl"
+                aria-hidden="true"
+              />
+              <span
+                className="invitation-corner invitation-corner--br"
+                aria-hidden="true"
+              />
+              <video
+                className="invitation-video"
+                src="/media/drone.mp4"
+                poster="/media/drone-poster.png"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-label="Aerial drone footage of a numbered Burakorn Performance build"
+              />
+              <figcaption className="invitation-media-caption">
+                <span className="mono-label">Aerial study</span>
+                <span>BP-002 / Moray</span>
+              </figcaption>
+            </motion.figure>
           </div>
           <div className="private-invitation-copy">
             <motion.aside className="invitation-panel gsap-item" {...cardMotion}>

@@ -260,10 +260,13 @@ export function HomeLuxurySections() {
             <div className="registry-proof-principles">
               {registryPrinciples.map(([label, text], index) => (
                 <motion.div className="principle-tile gsap-item" key={label} {...cardMotion}>
-                  <span className="principle-index" aria-hidden="true">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <span>{label}</span>
+                  <div className="principle-tile-head">
+                    <span className="principle-index" aria-hidden="true">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="principle-label">{label}</span>
+                  </div>
+                  <span className="principle-divider" aria-hidden="true" />
                   <p>{text}</p>
                 </motion.div>
               ))}

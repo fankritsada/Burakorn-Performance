@@ -2317,6 +2317,7 @@ img {
   margin-top: 40px;
   padding: 0 clamp(16px, 4vw, 48px);
   line-height: 0.78;
+  text-align: center;
   overflow: hidden;
 }
 
@@ -2328,6 +2329,7 @@ img {
   font-weight: 800;
   font-size: clamp(3rem, 18.5vw, 19rem);
   letter-spacing: -0.03em;
+  text-align: center;
   text-transform: uppercase;
   white-space: nowrap;
 }

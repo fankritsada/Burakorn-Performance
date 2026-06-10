@@ -316,16 +316,25 @@ export function HomeLuxurySections() {
 
       <LuxurySection className="philosophy-statement-section">
         <div className="container philosophy-statement-grid">
-          <div>
+          <div className="philosophy-statement-copy">
             <p className="mono-label accent">Core philosophy</p>
             <h2 data-gsap-heading>The chassis has its original age. The build is new.</h2>
+            <p className="philosophy-statement-lead">
+              Every Burakorn build is honest about where it begins and deliberate
+              about what it becomes. These three principles govern the registry.
+            </p>
             <span className="gsap-rule" aria-hidden="true" />
           </div>
           <div className="philosophy-ledger">
-            {philosophyPairs.map(([title, text]) => (
+            {philosophyPairs.map(([title, text], index) => (
               <motion.div className="ledger-row gsap-item" key={title} {...cardMotion}>
-                <span>{title}</span>
-                <p>{text}</p>
+                <span className="ledger-index" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div className="ledger-body">
+                  <span className="ledger-title">{title}</span>
+                  <p>{text}</p>
+                </div>
               </motion.div>
             ))}
           </div>

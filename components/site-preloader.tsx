@@ -3,6 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
+declare global {
+  interface Window {
+    __burakornLoaded?: boolean;
+  }
+}
+
 // Every heavy asset on the home page. The preloader will not dismiss until
 // each of these is fully fetched (images) or buffered enough to play through
 // without stalling (videos).
@@ -102,6 +108,10 @@ export function SitePreloader() {
         if (active) {
           setProgress(100);
           setDone(true);
+          // Tell media components the site is being revealed so they can
+          // restart playback cleanly from the first frame.
+          window.__burakornLoaded = true;
+          window.dispatchEvent(new Event("burakorn:loaded"));
         }
       }, wait);
     };

@@ -13,17 +13,33 @@ export function HeroVideo() {
     }
 
     video.muted = true;
-    const play = () => {
+
+    // Restart from the first frame and play. Called once the preloader
+    // reveals the site so the hero begins at the very start of the clip.
+    const startFromBeginning = () => {
+      try {
+        video.currentTime = 0;
+      } catch {
+        // Seeking before metadata is ready can throw; ignore and retry on play.
+      }
       void video.play().catch(() => {
         // Muted autoplay can still be delayed by some browser states.
       });
     };
 
-    play();
-    video.addEventListener("canplay", play, { once: true });
+    // If the preloader already finished (cached/fast loads), start now.
+    // Otherwise wait for its "loaded" signal so the clip starts in sync
+    // with the reveal instead of mid-sequence behind the loading screen.
+    if (window.__burakornLoaded) {
+      startFromBeginning();
+    } else {
+      window.addEventListener("burakorn:loaded", startFromBeginning, {
+        once: true,
+      });
+    }
 
     return () => {
-      video.removeEventListener("canplay", play);
+      window.removeEventListener("burakorn:loaded", startFromBeginning);
     };
   }, []);
 
@@ -31,7 +47,6 @@ export function HeroVideo() {
     <video
       ref={videoRef}
       className="hero-video"
-      autoPlay
       loop
       muted
       playsInline

@@ -1,4 +1,5 @@
 import { PrivateInterest } from "@/components/private-interest";
+import { PageHero } from "@/components/page-hero";
 import { SectionHeading } from "@/components/section-heading";
 import { createMetadata } from "@/lib/seo";
 import { informationalPageJsonLd, JsonLd } from "@/lib/structured-data";
@@ -21,16 +22,11 @@ export default function PhilosophyPage() {
             "Status effect without status waste, documentation over claims, and build-sheet logic over marketplace logic.",
         })}
       />
-      <section className="page-hero">
-        <div className="container">
-          <p className="mono-label accent">Philosophy</p>
-          <h1>Status effect without status waste.</h1>
-          <p>
-            For people who can afford more, but refuse to waste more. The point
-            is presence, control, documentation, and ownership logic.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Philosophy"
+        title="Status effect without status waste."
+        lede="For people who can afford more, but refuse to waste more. The point is presence, control, documentation, and ownership logic."
+      />
       <section className="section">
         <div className="container split-grid">
           <SectionHeading

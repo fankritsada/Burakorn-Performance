@@ -390,6 +390,47 @@ img {
   content: "";
 }
 
+.motion-corner {
+  position: absolute;
+  z-index: 2;
+  width: 26px;
+  height: 26px;
+  pointer-events: none;
+}
+
+.motion-corner--tl {
+  top: 14px;
+  left: 14px;
+  border-top: 1px solid rgba(214, 93, 78, 0.7);
+  border-left: 1px solid rgba(214, 93, 78, 0.7);
+}
+
+.motion-corner--br {
+  right: 14px;
+  bottom: 14px;
+  border-right: 1px solid rgba(214, 93, 78, 0.7);
+  border-bottom: 1px solid rgba(214, 93, 78, 0.7);
+}
+
+.motion-caption {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.78));
+}
+
+.motion-caption .mono-label {
+  color: rgba(243, 238, 227, 0.74);
+}
+
+.motion-caption-tag {
+  color: rgba(214, 93, 78, 0.82) !important;
+}
+
 .motion-video {
   width: 100%;
   height: 100%;
@@ -421,7 +462,66 @@ img {
   transform-origin: left;
 }
 
-.motion-copy p:not(.mono-label) {
+.motion-lead {
+  color: var(--foreground) !important;
+  font-size: 1.18rem !important;
+  line-height: 1.6 !important;
+}
+
+.motion-criteria {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 24px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.motion-criteria li {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  border: 1px solid rgba(243, 238, 227, 0.16);
+  border-radius: 999px;
+  color: var(--foreground);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition:
+    border-color 220ms ease,
+    color 220ms ease;
+}
+
+.motion-criteria li span {
+  color: rgba(214, 93, 78, 0.78);
+}
+
+.motion-criteria li:hover {
+  border-color: rgba(214, 93, 78, 0.45);
+}
+
+.motion-note {
+  position: relative;
+  padding-left: 18px;
+  color: var(--muted-strong) !important;
+  font-size: 0.98rem !important;
+  line-height: 1.7 !important;
+}
+
+.motion-note::before {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  width: 2px;
+  height: calc(100% - 8px);
+  background: rgba(243, 238, 227, 0.2);
+  content: "";
+}
+
+.motion-copy p:not(.mono-label):not(.motion-lead):not(.motion-note) {
   color: var(--muted-strong);
   font-size: 1.05rem;
   line-height: 1.72;

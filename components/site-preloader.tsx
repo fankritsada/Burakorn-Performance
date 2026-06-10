@@ -25,51 +25,47 @@ const VIDEO_ASSETS = [
   "/visuals/burakorn-motion-study.mp4",
 ];
 
+// Each asset counts equally toward progress so the counter always advances,
+// even on slow connections where byte-level streaming of the large hero video
+// would otherwise dominate (and stall) the bar.
 const ALL_ASSETS = [...IMAGE_ASSETS, ...VIDEO_ASSETS];
 const TOTAL_ASSETS = ALL_ASSETS.length;
 const MIN_VISIBLE_MS = 900;
-// Approximate byte sizes used to weight progress before the real
-// Content-Length arrives. Keeps the bar from jumping unrealistically.
-const FALLBACK_BYTES: Record<string, number> = {
-  "/visuals/burakorn-performance-hero-video.mp4": 50_000_000,
-  "/visuals/burakorn-motion-study.mp4": 2_800_000,
-};
-const DEFAULT_IMAGE_BYTES = 810_000;
+// Videos should never trap the visitor: we wait only until they can play, or
+// until this per-video cap elapses, then count them as ready.
+const VIDEO_TIMEOUT_MS = 4000;
 
-// Fully downloads an asset via fetch (streaming) so we can report real
-// byte-level progress. This warms the HTTP cache, so the <img>/<video>
-// elements on the page reuse the bytes instead of re-fetching them.
-async function fetchAsset(
-  src: string,
-  onBytes: (loaded: number, total: number) => void,
-): Promise<void> {
-  try {
-    const res = await fetch(src, { cache: "force-cache" });
-    if (!res.ok || !res.body) {
-      onBytes(1, 1);
-      return;
-    }
+// Resolves once an image has finished loading (or errored — we never want a
+// missing asset to trap the visitor on the loader).
+function preloadImage(src: string): Promise<void> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = () => resolve();
+    img.src = src;
+  });
+}
 
-    const headerTotal = Number(res.headers.get("Content-Length")) || 0;
-    const total =
-      headerTotal ||
-      FALLBACK_BYTES[src] ||
-      DEFAULT_IMAGE_BYTES;
+// Resolves once a video has buffered enough to play through, or after a short
+// timeout. Warms the cache without blocking the reveal on a full download.
+function preloadVideo(src: string): Promise<void> {
+  return new Promise((resolve) => {
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      resolve();
+    };
 
-    const reader = res.body.getReader();
-    let loaded = 0;
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      loaded += value?.length ?? 0;
-      onBytes(loaded, Math.max(total, loaded));
-    }
-    onBytes(Math.max(loaded, total), Math.max(loaded, total));
-  } catch {
-    // Network/abort errors should not trap the user on the loader.
-    onBytes(1, 1);
-  }
+    const video = document.createElement("video");
+    video.preload = "auto";
+    video.muted = true;
+    video.src = src;
+    video.oncanplaythrough = finish;
+    video.onloadeddata = finish;
+    video.onerror = finish;
+    window.setTimeout(finish, VIDEO_TIMEOUT_MS);
+  });
 }
 
 export function SitePreloader() {
@@ -80,19 +76,12 @@ export function SitePreloader() {
 
   useEffect(() => {
     let active = true;
-
-    // Weight each asset by its (estimated) byte size so the bar reflects the
-    // real download. Images count for very little next to the hero video.
-    const weights = ALL_ASSETS.map(
-      (src) => FALLBACK_BYTES[src] ?? DEFAULT_IMAGE_BYTES,
-    );
-    const loadedBytes = new Array<number>(TOTAL_ASSETS).fill(0);
+    let completed = 0;
 
     const commit = () => {
       if (!active) return;
-      const totalWeight = weights.reduce((a, b) => a + b, 0);
-      const loadedWeight = loadedBytes.reduce((a, b) => a + b, 0);
-      const ratio = totalWeight > 0 ? loadedWeight / totalWeight : 1;
+      completed += 1;
+      const ratio = TOTAL_ASSETS > 0 ? completed / TOTAL_ASSETS : 1;
       setProgress((prev) => {
         const next = Math.min(Math.round(ratio * 100), 100);
         // Monotonic — never let the bar visually move backwards.
@@ -116,19 +105,17 @@ export function SitePreloader() {
       }, wait);
     };
 
-    // Global safety net: reveal the site after 12s no matter what so a slow
+    // Global safety net: reveal the site after 8s no matter what so a slow
     // or stalled connection can never trap the visitor on the loader.
-    const safety = window.setTimeout(finishAll, 12000);
+    const safety = window.setTimeout(finishAll, 8000);
 
     Promise.all(
-      ALL_ASSETS.map((src, i) =>
-        fetchAsset(src, (loaded, total) => {
-          // Re-weight to the real Content-Length once we know it.
-          if (total > 0) weights[i] = total;
-          loadedBytes[i] = loaded;
-          commit();
-        }),
-      ),
+      ALL_ASSETS.map((src) => {
+        const loader = VIDEO_ASSETS.includes(src)
+          ? preloadVideo(src)
+          : preloadImage(src);
+        return loader.then(commit);
+      }),
     ).then(() => {
       window.clearTimeout(safety);
       finishAll();

@@ -35,8 +35,7 @@ export function HeroVideo() {
       loop
       muted
       playsInline
-      preload="metadata"
-      poster="/visuals/burakorn-performance-hero-owner.jpg"
+      preload="auto"
     >
       <source
         src="/visuals/burakorn-performance-hero-video.mp4"

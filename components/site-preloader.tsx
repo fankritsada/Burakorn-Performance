@@ -25,18 +25,18 @@ const VIDEO_ASSETS = [
   "/visuals/burakorn-motion-study.mp4",
 ];
 
-// Each asset counts equally toward progress so the counter always advances,
-// even on slow connections where byte-level streaming of the large hero video
-// would otherwise dominate (and stall) the bar.
+// Each asset is warmed in the background, but the visible counter is driven by
+// a time-based animation so it can NEVER freeze waiting on a slow/stalled
+// download (e.g. the large hero video on a poor connection).
 const ALL_ASSETS = [...IMAGE_ASSETS, ...VIDEO_ASSETS];
-const TOTAL_ASSETS = ALL_ASSETS.length;
 const MIN_VISIBLE_MS = 900;
-// Videos should never trap the visitor: we wait only until they can play, or
-// until this per-video cap elapses, then count them as ready.
-const VIDEO_TIMEOUT_MS = 4000;
+// How long the counter takes to crawl to ~90% on its own. Once assets finish
+// (or the cap below elapses) it accelerates to 100 and the site is revealed.
+const RAMP_MS = 2200;
+// Hard cap: the site is always revealed by this point, no matter what.
+const MAX_VISIBLE_MS = 6000;
 
-// Resolves once an image has finished loading (or errored — we never want a
-// missing asset to trap the visitor on the loader).
+// Warm an image into the HTTP cache. Never rejects.
 function preloadImage(src: string): Promise<void> {
   return new Promise((resolve) => {
     const img = new Image();
@@ -46,8 +46,7 @@ function preloadImage(src: string): Promise<void> {
   });
 }
 
-// Resolves once a video has buffered enough to play through, or after a short
-// timeout. Warms the cache without blocking the reveal on a full download.
+// Warm a video into the HTTP cache. Never rejects.
 function preloadVideo(src: string): Promise<void> {
   return new Promise((resolve) => {
     let settled = false;
@@ -56,7 +55,6 @@ function preloadVideo(src: string): Promise<void> {
       settled = true;
       resolve();
     };
-
     const video = document.createElement("video");
     video.preload = "auto";
     video.muted = true;
@@ -64,7 +62,7 @@ function preloadVideo(src: string): Promise<void> {
     video.oncanplaythrough = finish;
     video.onloadeddata = finish;
     video.onerror = finish;
-    window.setTimeout(finish, VIDEO_TIMEOUT_MS);
+    window.setTimeout(finish, 3000);
   });
 }
 
@@ -76,54 +74,64 @@ export function SitePreloader() {
 
   useEffect(() => {
     let active = true;
-    let completed = 0;
+    let raf = 0;
+    let assetsReady = false;
+    let finished = false;
+    const start = startRef.current;
 
-    const commit = () => {
-      if (!active) return;
-      completed += 1;
-      const ratio = TOTAL_ASSETS > 0 ? completed / TOTAL_ASSETS : 1;
-      setProgress((prev) => {
-        const next = Math.min(Math.round(ratio * 100), 100);
-        // Monotonic — never let the bar visually move backwards.
-        return next > prev ? next : prev;
-      });
+    const reveal = () => {
+      if (!active || finished) return;
+      finished = true;
+      setProgress(100);
+      setDone(true);
+      // Tell media components the site is being revealed so they can
+      // restart playback cleanly from the first frame.
+      window.__burakornLoaded = true;
+      window.dispatchEvent(new Event("burakorn:loaded"));
     };
 
-    const finishAll = () => {
-      if (!active) return;
-      const elapsed = Date.now() - startRef.current;
-      const wait = Math.max(MIN_VISIBLE_MS - elapsed, 0);
-      window.setTimeout(() => {
-        if (active) {
-          setProgress(100);
-          setDone(true);
-          // Tell media components the site is being revealed so they can
-          // restart playback cleanly from the first frame.
-          window.__burakornLoaded = true;
-          window.dispatchEvent(new Event("burakorn:loaded"));
-        }
-      }, wait);
-    };
-
-    // Global safety net: reveal the site after 8s no matter what so a slow
-    // or stalled connection can never trap the visitor on the loader.
-    const safety = window.setTimeout(finishAll, 8000);
-
+    // Warm the HTTP cache in the background. This never blocks the counter.
     Promise.all(
-      ALL_ASSETS.map((src) => {
-        const loader = VIDEO_ASSETS.includes(src)
-          ? preloadVideo(src)
-          : preloadImage(src);
-        return loader.then(commit);
-      }),
+      ALL_ASSETS.map((src) =>
+        VIDEO_ASSETS.includes(src) ? preloadVideo(src) : preloadImage(src),
+      ),
     ).then(() => {
-      window.clearTimeout(safety);
-      finishAll();
+      assetsReady = true;
     });
+
+    // Time-based counter that always advances and always completes.
+    const tick = () => {
+      if (!active) return;
+      const elapsed = Date.now() - start;
+
+      // Ease toward ~90% over RAMP_MS, then hold until assets are ready
+      // (or the hard cap elapses) before snapping to 100.
+      const ramp = Math.min(elapsed / RAMP_MS, 1);
+      const eased = 1 - Math.pow(1 - ramp, 3); // easeOutCubic
+      let value = Math.round(eased * 90);
+
+      const readyToFinish =
+        elapsed >= MIN_VISIBLE_MS &&
+        (assetsReady || elapsed >= MAX_VISIBLE_MS);
+
+      if (readyToFinish) {
+        value = 100;
+      }
+
+      setProgress((prev) => (value > prev ? value : prev));
+
+      if (value >= 100) {
+        reveal();
+        return;
+      }
+      raf = window.requestAnimationFrame(tick);
+    };
+
+    raf = window.requestAnimationFrame(tick);
 
     return () => {
       active = false;
-      window.clearTimeout(safety);
+      window.cancelAnimationFrame(raf);
     };
   }, []);
 

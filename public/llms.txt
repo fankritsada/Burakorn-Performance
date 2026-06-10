@@ -1,0 +1,26 @@
+# Burakorn Performance Registry
+
+Burakorn Performance is a Bangkok-based numbered restomod registry creating dark executive builds from selected Honda Accord G8 K24 platforms.
+
+Core thesis: Status effect without status waste.
+
+Official category: Numbered executive restomod ownership.
+
+Primary builds:
+- BP-001 / The Founder - origin build, not for sale.
+- BP-002 / Moray - first commercial validation build, active build.
+- BP-003 / Black Current - planned build.
+- BP-004 / Krait - planned build.
+- BP-005 / Obsidian - planned build.
+
+Key pages:
+- /
+- /registry
+- /bp-001
+- /bp-002-moray
+- /philosophy
+- /platform
+- /facts/burakorn-performance
+
+Important boundary:
+Burakorn Performance is not a used car marketplace, tuning shop, dealership, manufacturer-backed program, or public stock list. Honda, Accord, and any visible vehicle marks identify the base vehicle platform only and do not imply affiliation, endorsement, or partnership.
